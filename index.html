@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium Luxury Diary with realistic textures and animations">
+    <title>Luxury Diary - Ultimate Edition</title>
+    
+    <!-- CDN LIBRARIES -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --gold-dark: #d4a574;
+            --gold-light: #f4e4c1;
+            --burgundy-dark: #5c2e3a;
+            --burgundy-light: #8b4a5a;
+            --ivory: #f5f3f0;
+            --cream: #fefdfb;
+            --charcoal: #1a1a1a;
+            --black-luxe: #0f0f0f;
+            --shadow-subtle: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+            --shadow-dark: rgba(0, 0, 0, 0.25);
+            
+            --font-serif: 'Playfair Display', serif;
+            --font-elegant: 'Cormorant Garamond', serif;
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            font-family: var(--font-sans);
+            color: var(--charcoal);
+            -webkit-font-smoothing: antialiased;
+            perspective: 1200px;
+        }
+
+        /* ========== LANDING ========== */
+        #landing {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at center, #2a2a3a 0%, #0f0f1a 100%);
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 0.8s ease-out;
+            flex-direction: column;
+        }
+
+        #landing.hidden {
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        #starfieldContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .landing-content {
+            text-align: center;
+            color: white;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            padding: 4rem;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 165, 116, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .landing-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: floatIn 1s ease-out 0.2s forwards;
+        }
+
+        @keyframes floatIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .landing-title {
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.3s forwards;
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .landing-subtitle {
+            font-family: var(--font-elegant);
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            color: rgba(244, 228, 193, 0.8);
+            animation: fadeInUp 0.8s ease-out 0.5s forwards;
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+
+        .landing-btn {
+            font-family: var(--font-serif);
+            padding: 1.2rem 3.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: 2px solid var(--gold-dark);
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-light) 100%);
+            color: var(--black-luxe);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 15px 40px rgba(212, 165, 116, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.7s forwards;
+            letter-spacing: 1.5px;
+        }
+
+        .landing-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(212, 165, 116, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== MAIN CONTAINER ========== */
+        .container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #2d2d2d 100%);
+            padding: 20px;
+        }
+
+        /* ========== BOOK STRUCTURE ========== */
+        .book-container {
+            perspective: 1200px;
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .book {
+            width: 100%;
+            height: 100%;
+            max-width: 900px;
+            max-height: 600px;
+            display: flex;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(212, 165, 116, 0.2),
+                inset -2px 0 10px rgba(0, 0, 0, 0.3),
+                inset 2px 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            background: linear-gradient(90deg, #f5f3f0 0%, #fefdfb 50%, #f5f3f0 100%);
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .book::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.02) 2px,
+                    rgba(0, 0, 0, 0.02) 4px
+                ),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.01) 2px,
+                    rgba(0, 0, 0, 0.01) 4px
+                );
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* ========== PAGE STRUCTURE ========== */
+        .page {
+            flex: 1;
+            background: var(--ivory);
+            padding: 40px 35px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                inset 0 0 20px rgba(0, 0, 0, 0.05),
+                inset 1px 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(212, 165, 116, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(139, 74, 90, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .page::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 1px,
+                rgba(0, 0, 0, 0.005) 1px,
+                rgba(0, 0, 0, 0.005) 2px
+            );
+            pointer-events: none;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.8rem;
+            color: var(--gold-dark);
+            font-family: var(--font-elegant);
+            letter-spacing: 2px;
+            opacity: 0.6;
+        }
+
+        .page-number.left {
+            left: 30px;
+        }
+
+        .page-number.right {
+            right: 30px;
+        }
+
+        .spine {
+            width: 30px;
+            background: linear-gradient(90deg, #8b7355 0%, #a0826d 50%, #8b7355 100%);
+            box-shadow: 
+                inset -3px 0 8px rgba(0, 0, 0, 0.3),
+                inset 3px 0 8px rgba(255, 255, 255, 0.1),
+                0 0 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spine::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 1px,
+                rgba(0, 0, 0, 0.1) 1px,
+                rgba(0, 0, 0, 0.1) 2px
+            );
+            pointer-events: none;
+        }
+
+        .spine::after {
+            content: '✦';
+            color: var(--gold-dark);
+            font-size: 1.2rem;
+            opacity: 0.6;
+            z-index: 2;
+        }
+
+        /* ========== CONTROLS ========== */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(212, 165, 116, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: 1px solid var(--gold-dark);
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.2) 0%, rgba(212, 165, 116, 0.05) 100%);
+            color: var(--gold-light);
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: var(--font-serif);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.4) 0%, rgba(212, 165, 116, 0.15) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 165, 116, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn--danger {
+            border-color: #ff6b6b;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2) 0%, rgba(255, 107, 107, 0.05) 100%);
+            color: #ff9999;
+        }
+
+        .btn--danger:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.4) 0%, rgba(255, 107, 107, 0.15) 100%);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-separator {
+            width: 1px;
+            height: 30px;
+            background: linear-gradient(180deg, transparent, rgba(212, 165, 116, 0.3), transparent);
+        }
+
+        .page-counter {
+            color: var(--gold-light);
+            font-family: var(--font-serif);
+            font-weight: 600;
+            font-size: 0.95rem;
+            min-width: 100px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        /* ========== TOOLBAR ========== */
+        .toolbar {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px 20px;
+            border-radius: 40px;
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .toolbar-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--gold-dark);
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.2) 0%, rgba(212, 165, 116, 0.05) 100%);
+            color: var(--gold-light);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toolbar-btn:hover {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.4) 0%, rgba(212, 165, 116, 0.15) 100%);
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(212, 165, 116, 0.3);
+        }
+
+        /* ========== FORM ========== */
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .form-section::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .form-section::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .form-section::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 10px;
+            opacity: 0.5;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-family: var(--font-serif);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--burgundy-dark);
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            padding: 12px 15px;
+            border: 2px solid var(--gold-dark);
+            border-radius: 8px;
+            font-family: var(--font-elegant);
+            font-size: 1rem;
+            background: linear-gradient(135deg, rgba(244, 228, 193, 0.1) 0%, transparent 100%);
+            color: var(--charcoal);
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--burgundy-light);
+            box-shadow: 0 0 15px rgba(212, 165, 116, 0.3), inset 0 0 10px rgba(212, 165, 116, 0.1);
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 150px;
+            max-height: 300px;
+            font-family: var(--font-elegant);
+        }
+
+        /* ========== MODAL ========== */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--ivory) 0%, var(--cream) 100%);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            max-width: 500px;
+            border: 2px solid var(--gold-dark);
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-title {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            color: var(--burgundy-dark);
+            text-align: center;
+        }
+
+        .modal-text {
+            font-family: var(--font-elegant);
+            font-size: 1.05rem;
+            color: var(--charcoal);
+            margin-bottom: 30px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            border: 2px solid var(--gold-dark);
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-light) 100%);
+            color: var(--black-luxe);
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: var(--font-serif);
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212, 165, 116, 0.4);
+        }
+
+        .modal-btn--cancel {
+            background: var(--ivory);
+            color: var(--charcoal);
+            border-color: var(--burgundy-dark);
+        }
+
+        .modal-btn--cancel:hover {
+            background: var(--cream);
+            box-shadow: 0 10px 25px rgba(92, 46, 58, 0.2);
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes pageFlip {
+            0% {
+                transform: rotateY(0deg);
+            }
+            100% {
+                transform: rotateY(-180deg);
+            }
+        }
+
+        @keyframes pageFlipReverse {
+            0% {
+                transform: rotateY(0deg);
+            }
+            100% {
+                transform: rotateY(180deg);
+            }
+        }
+
+        .page.flipping {
+            animation: pageFlip 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            transform-origin: right center;
+        }
+
+        .page.flipping-reverse {
+            animation: pageFlipReverse 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            transform-origin: left center;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .book-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .book {
+                max-width: 100%;
+                max-height: 500px;
+            }
+
+            .controls {
+                flex-wrap: wrap;
+                width: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .landing-title {
+                font-size: 2.5rem;
+            }
+
+            .landing-subtitle {
+                font-size: 1rem;
+            }
+
+            .toolbar {
+                top: 15px;
+                right: 15px;
+            }
+
+            .controls {
+                bottom: 15px;
+                padding: 15px 20px;
+            }
+
+            .btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* ========== NOTIFICATION ========== */
+        .notification {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-light) 100%);
+            color: var(--black-luxe);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-family: var(--font-serif);
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(212, 165, 116, 0.4);
+            animation: slideUp 0.4s ease;
+            z-index: 99;
+        }
+
+        .notification.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Landing Page -->
+    <div id="landing">
+        <div id="starfieldContainer"></div>
+        <div class="landing-content">
+            <div class="landing-icon">📖</div>
+            <h1 class="landing-title">LUXURY DIARY</h1>
+            <p class="landing-subtitle">Premium Digital Journal</p>
+            <button class="landing-btn" onclick="startDiary()">Begin Your Story</button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="book-container">
+            <div class="book">
+                <!-- Left Page -->
+                <div class="page">
+                    <span class="page-number left" id="leftPageNum"></span>
+                    <div class="form-section" id="leftFormSection"></div>
+                </div>
+
+                <!-- Spine -->
+                <div class="spine"></div>
+
+                <!-- Right Page -->
+                <div class="page">
+                    <span class="page-number right" id="rightPageNum"></span>
+                    <div class="form-section" id="rightFormSection"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <button class="toolbar-btn" title="Add Page" onclick="addNewPage()">➕</button>
+        <button class="toolbar-btn" title="Export PDF" onclick="exportToPDF()">📥</button>
+        <button class="toolbar-btn" title="Settings" onclick="openSettings()">⚙️</button>
+    </div>
+
+    <!-- Delete All Modal -->
+    <div id="deleteAllModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">⚠️ Delete All Pages?</h2>
+            <p class="modal-text">This action will permanently delete all your diary entries. This cannot be undone.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn--cancel" onclick="closeModal('deleteAllModal')">Cancel</button>
+                <button class="modal-btn" onclick="confirmDeleteAll()">Delete All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button class="btn" onclick="previousPage()">← Previous</button>
+        <div class="btn-separator"></div>
+        <div class="page-counter">
+            <span id="currentPage">1</span> / <span id="totalPages">1</span>
+        </div>
+        <div class="btn-separator"></div>
+        <button class="btn" onclick="nextPage()">Next →</button>
+        <div class="btn-separator"></div>
+        <button class="btn btn--danger" onclick="openDeleteModal()">🗑️ Delete All</button>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification hidden"></div>
+
+    <script>
+        // ========== STATE MANAGEMENT ==========
+        let pages = [];
+        let currentPageIndex = 0;
+
+        // Initialize with one empty page
+        function initializeDiary() {
+            pages = [{ title: '', content: '' }];
+            currentPageIndex = 0;
+            renderPages();
+        }
+
+        // ========== LANDING PAGE ==========
+        function startDiary() {
+            const landing = document.getElementById('landing');
+            landing.classList.add('hidden');
+            setTimeout(() => {
+                initializeDiary();
+            }, 800);
+        }
+
+        // Starfield animation
+        function createStarfield() {
+            const container = document.getElementById('starfieldContainer');
+            if (!container) return;
+            
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.style.position = 'absolute';
+                star.style.width = Math.random() * 2 + 'px';
+                star.style.height = star.style.width;
+                star.style.background = 'white';
+                star.style.borderRadius = '50%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.opacity = Math.random() * 0.8 + 0.2;
+                star.style.boxShadow = `0 0 ${Math.random() * 3}px white`;
+                star.style.animation = `twinkle ${Math.random() * 3 + 2}s infinite`;
+                container.appendChild(star);
+            }
+
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes twinkle {
+                    0%, 100% { opacity: 0.3; }
+                    50% { opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        createStarfield();
+
+        // ========== PAGE MANAGEMENT ==========
+        function renderPages() {
+            const leftForm = document.getElementById('leftFormSection');
+            const rightForm = document.getElementById('rightFormSection');
+            const leftPageNum = document.getElementById('leftPageNum');
+            const rightPageNum = document.getElementById('rightPageNum');
+
+            leftForm.innerHTML = '';
+            rightForm.innerHTML = '';
+
+            // Left page (even index)
+            const leftPageIdx = currentPageIndex * 2;
+            const rightPageIdx = currentPageIndex * 2 + 1;
+
+            if (leftPageIdx < pages.length) {
+                const leftPage = pages[leftPageIdx];
+                leftForm.innerHTML = createPageForm(leftPageIdx, leftPage);
+                leftPageNum.textContent = leftPageIdx + 1;
+            } else {
+                leftForm.innerHTML = '<p style="color: var(--gold-dark); opacity: 0.5;">This page is empty</p>';
+                leftPageNum.textContent = leftPageIdx + 1;
+            }
+
+            // Right page
+            if (rightPageIdx < pages.length) {
+                const rightPage = pages[rightPageIdx];
+                rightForm.innerHTML = createPageForm(rightPageIdx, rightPage);
+                rightPageNum.textContent = rightPageIdx + 1;
+            } else {
+                rightForm.innerHTML = '<p style="color: var(--gold-dark); opacity: 0.5;">This page is empty</p>';
+                rightPageNum.textContent = rightPageIdx + 1;
+            }
+
+            updatePageCounter();
+        }
+
+        function createPageForm(index, pageData) {
+            return `
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" class="form-input" value="${pageData.title}" 
+                        onchange="updatePage(${index}, 'title', this.value)" placeholder="Enter title...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Entry</label>
+                    <textarea class="form-input" 
+                        onchange="updatePage(${index}, 'content', this.value)" 
+                        placeholder="Write your story here..."></textarea>
+                </div>
+            `;
+        }
+
+        function updatePage(index, field, value) {
+            if (field === 'title') {
+                pages[index].title = value;
+                localStorage.setItem('diaryPages', JSON.stringify(pages));
+            } else if (field === 'content') {
+                pages[index].content = value;
+                localStorage.setItem('diaryPages', JSON.stringify(pages));
+            }
+        }
+
+        function addNewPage() {
+            pages.push({ title: '', content: '' });
+            localStorage.setItem('diaryPages', JSON.stringify(pages));
+            renderPages();
+            showNotification('New page added');
+        }
+
+        function nextPage() {
+            const maxPages = Math.ceil(pages.length / 2);
+            if (currentPageIndex < maxPages - 1) {
+                currentPageIndex++;
+                animatePageTurn();
+                renderPages();
+            }
+        }
+
+        function previousPage() {
+            if (currentPageIndex > 0) {
+                currentPageIndex--;
+                animatePageTurn(true);
+                renderPages();
+            }
+        }
+
+        function animatePageTurn(reverse = false) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.style.animation = 'none';
+                setTimeout(() => {
+                    if (reverse) {
+                        page.classList.add('flipping-reverse');
+                    } else {
+                        page.classList.add('flipping');
+                    }
+                }, 10);
+            });
+
+            setTimeout(() => {
+                pages.forEach(page => {
+                    page.classList.remove('flipping', 'flipping-reverse');
+                    page.style.animation = 'none';
+                });
+            }, 800);
+        }
+
+        function updatePageCounter() {
+            const totalPagePairs = Math.ceil(pages.length / 2);
+            document.getElementById('currentPage').textContent = currentPageIndex + 1;
+            document.getElementById('totalPages').textContent = totalPagePairs;
+        }
+
+        // ========== MODAL FUNCTIONS ==========
+        function openDeleteModal() {
+            document.getElementById('deleteAllModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function confirmDeleteAll() {
+            pages = [{ title: '', content: '' }];
+            currentPageIndex = 0;
+            localStorage.removeItem('diaryPages');
+            renderPages();
+            closeModal('deleteAllModal');
+            showNotification('All pages deleted');
+        }
+
+        // ========== EXPORT & SETTINGS ==========
+        function exportToPDF() {
+            showNotification('Preparing PDF...');
+            // This would require pdf library integration
+            setTimeout(() => {
+                showNotification('Export feature available with pdf library');
+            }, 1500);
+        }
+
+        function openSettings() {
+            showNotification('Settings panel coming soon');
+        }
+
+        // ========== NOTIFICATIONS ==========
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.remove('hidden');
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 2000);
+        }
+
+        // ========== STORAGE & PERSISTENCE ==========
+        function loadDiary() {
+            const saved = localStorage.getItem('diaryPages');
+            if (saved) {
+                try {
+                    pages = JSON.parse(saved);
+                } catch (e) {
+                    pages = [{ title: '', content: '' }];
+                }
+            } else {
+                pages = [{ title: '', content: '' }];
+            }
+            renderPages();
+        }
+
+        // Load diary on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            // Landing page animation
+            setTimeout(() => {
+                // User needs to click to start
+            }, 500);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && e.ctrlKey) nextPage();
+            if (e.key === 'ArrowLeft' && e.ctrlKey) previousPage();
+        });
+
+        // Initial load
+        window.addEventListener('load', () => {
+            loadDiary();
+        });
+
+        // Auto-save
+        setInterval(() => {
+            localStorage.setItem('diaryPages', JSON.stringify(pages));
+        }, 5000);
+    </script>
+</body>
+</html>
