@@ -601,6 +601,38 @@
             box-shadow: 0 10px 25px rgba(92, 46, 58, 0.2);
         }
 
+        /* ========== SETTINGS MODAL ========== */
+        .modal-settings {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .settings-btn {
+            padding: 15px 20px;
+            border: 2px solid var(--gold-dark);
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.15) 0%, rgba(212, 165, 116, 0.05) 100%);
+            color: var(--burgundy-dark);
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: var(--font-serif);
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .settings-btn:hover {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.3) 0%, rgba(212, 165, 116, 0.1) 100%);
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px rgba(212, 165, 116, 0.3);
+        }
+
+        .settings-btn:active {
+            transform: translateX(3px);
+        }
+
         /* ========== ANIMATIONS ========== */
         /* ========== BOOK COVER ========== */
         .book-cover {
@@ -972,9 +1004,7 @@
     </div>
 
     <!-- Main Container -->
-    <div class="container" style="display: none;">
-
-    </div>
+    <div class="container">
         <div class="book-container">
             <div class="book">
                 <!-- Left Page -->
@@ -1010,6 +1040,44 @@
             <div class="modal-buttons">
                 <button class="modal-btn modal-btn--cancel" onclick="closeModal('deleteAllModal')">Cancel</button>
                 <button class="modal-btn" onclick="confirmDeleteAll()">Delete All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">⚙️ Settings</h2>
+            <div class="modal-settings">
+                <button class="settings-btn" onclick="openCoverCustomizer()">📖 Customize Cover</button>
+                <button class="settings-btn" onclick="showNotification('Theme coming soon')">🎨 Theme Settings</button>
+                <button class="settings-btn" onclick="showNotification('About coming soon')">ℹ️ About</button>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn--cancel" onclick="closeSettings()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cover Customizer Modal -->
+    <div id="coverCustomizerModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">📖 Customize Cover</h2>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label class="form-label">Title</label>
+                <input type="text" id="customTitleInput" class="form-input" placeholder="Enter title...">
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label class="form-label">Subtitle</label>
+                <input type="text" id="customSubtitleInput" class="form-input" placeholder="Enter subtitle...">
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label class="form-label">Author</label>
+                <input type="text" id="customAuthorInput" class="form-input" placeholder="Enter author...">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn--cancel" onclick="closeCoverCustomizer()">Cancel</button>
+                <button class="modal-btn" onclick="saveCoverCustomization()">💾 Save Changes</button>
             </div>
         </div>
     </div>
@@ -1205,39 +1273,49 @@
         function nextPage() {
             const maxPages = Math.ceil(pages.length / 2);
             if (currentPageIndex < maxPages - 1) {
-                currentPageIndex++;
                 animatePageTurn();
-                renderPages();
+                setTimeout(() => {
+                    currentPageIndex++;
+                    renderPages();
+                }, 450);
             }
         }
 
         function previousPage() {
             if (currentPageIndex > 0) {
-                currentPageIndex--;
                 animatePageTurn(true);
-                renderPages();
+                setTimeout(() => {
+                    currentPageIndex--;
+                    renderPages();
+                }, 450);
             }
         }
 
         function animatePageTurn(reverse = false) {
             const pages = document.querySelectorAll('.page');
-            pages.forEach(page => {
+            pages.forEach((page, index) => {
+                // Reset animation
                 page.style.animation = 'none';
+                page.classList.remove('flipping', 'flipping-reverse');
+                
+                // Trigger reflow to restart animation
+                void page.offsetWidth;
+                
+                // Start animation with staggered timing for visual effect
                 setTimeout(() => {
                     if (reverse) {
                         page.classList.add('flipping-reverse');
                     } else {
                         page.classList.add('flipping');
                     }
-                }, 10);
+                }, index * 30);
             });
 
             setTimeout(() => {
                 pages.forEach(page => {
                     page.classList.remove('flipping', 'flipping-reverse');
-                    page.style.animation = 'none';
                 });
-            }, 900);
+            }, 950);
         }
 
         function updatePageCounter() {
@@ -1274,7 +1352,41 @@
         }
 
         function openSettings() {
-            showNotification('Settings panel coming soon');
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        function openCoverCustomizer() {
+            const modal = document.getElementById('coverCustomizerModal');
+            document.getElementById('customTitleInput').value = localStorage.getItem('coverTitle') || 'MY DIARY';
+            document.getElementById('customSubtitleInput').value = localStorage.getItem('coverSubtitle') || 'A Journey of Moments';
+            document.getElementById('customAuthorInput').value = localStorage.getItem('coverAuthor') || 'By You';
+            modal.classList.add('active');
+        }
+
+        function closeCoverCustomizer() {
+            document.getElementById('coverCustomizerModal').classList.remove('active');
+        }
+
+        function saveCoverCustomization() {
+            const title = document.getElementById('customTitleInput').value || 'MY DIARY';
+            const subtitle = document.getElementById('customSubtitleInput').value || 'A Journey of Moments';
+            const author = document.getElementById('customAuthorInput').value || 'By You';
+
+            localStorage.setItem('coverTitle', title);
+            localStorage.setItem('coverSubtitle', subtitle);
+            localStorage.setItem('coverAuthor', author);
+
+            document.getElementById('coverTitle').textContent = title;
+            document.getElementById('coverSubtitle').textContent = subtitle;
+            document.getElementById('coverAuthor').textContent = author;
+
+            closeCoverCustomizer();
+            closeSettings();
+            showNotification('Cover saved successfully!');
         }
 
         // ========== NOTIFICATIONS ==========
