@@ -602,6 +602,225 @@
         }
 
         /* ========== ANIMATIONS ========== */
+        /* ========== BOOK COVER ========== */
+        .book-cover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            z-index: 500;
+            animation: fadeInBg 0.5s ease;
+        }
+
+        .book-cover.opening {
+            animation: fadeOutBg 0.8s ease forwards;
+        }
+
+        @keyframes fadeInBg {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOutBg {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .cover-container {
+            perspective: 1500px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cover-front {
+            width: 100%;
+            max-width: 500px;
+            height: 90vh;
+            background: linear-gradient(135deg, #8b7355 0%, #a0826d 50%, #8b7355 100%);
+            border-radius: 12px;
+            box-shadow: 
+                0 40px 80px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(212, 165, 116, 0.3),
+                inset -5px 0 20px rgba(0, 0, 0, 0.4),
+                inset 5px 0 20px rgba(255, 255, 255, 0.1);
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            transform: scale(1);
+            border: 2px solid rgba(212, 165, 116, 0.2);
+        }
+
+        .cover-front:hover {
+            transform: scale(1.02);
+            box-shadow: 
+                0 50px 100px rgba(0, 0, 0, 0.7),
+                0 0 0 1px rgba(212, 165, 116, 0.5),
+                inset -5px 0 20px rgba(0, 0, 0, 0.4),
+                inset 5px 0 20px rgba(255, 255, 255, 0.15);
+        }
+
+        .cover-front::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 1px,
+                rgba(0, 0, 0, 0.1) 1px,
+                rgba(0, 0, 0, 0.1) 2px
+            );
+            border-radius: 12px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cover-front::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+            border-radius: 12px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .cover-content {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .cover-title {
+            font-family: var(--font-serif);
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--gold-light);
+            margin: 0;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            outline: none;
+            border: 2px solid transparent;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .cover-title:focus {
+            background: rgba(212, 165, 116, 0.2);
+            border-color: var(--gold-dark);
+        }
+
+        .cover-subtitle {
+            font-family: var(--font-elegant);
+            font-size: 1.3rem;
+            color: rgba(244, 228, 193, 0.9);
+            margin: 0;
+            letter-spacing: 2px;
+            font-weight: 400;
+            outline: none;
+            border: 2px solid transparent;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .cover-subtitle:focus {
+            background: rgba(212, 165, 116, 0.2);
+            border-color: var(--gold-dark);
+        }
+
+        .cover-divider {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+            margin: 10px 0;
+        }
+
+        .cover-author {
+            font-family: var(--font-elegant);
+            font-size: 1.05rem;
+            color: rgba(244, 228, 193, 0.7);
+            margin: 0;
+            letter-spacing: 1.5px;
+            outline: none;
+            border: 2px solid transparent;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .cover-author:focus {
+            background: rgba(212, 165, 116, 0.2);
+            border-color: var(--gold-dark);
+        }
+
+        .cover-decoration {
+            position: relative;
+            z-index: 3;
+            width: 150px;
+            height: 50px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--gold-dark),
+                var(--gold-dark) 3px,
+                transparent 3px,
+                transparent 15px
+            );
+            border-top: 2px solid var(--gold-light);
+            border-bottom: 2px solid var(--gold-light);
+        }
+
+        .cover-decoration.cover-top {
+            margin-bottom: 20px;
+        }
+
+        .cover-decoration.cover-bottom {
+            margin-top: 20px;
+        }
+
+        .cover-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--font-elegant);
+            color: rgba(244, 228, 193, 0.5);
+            font-size: 0.95rem;
+            letter-spacing: 1.5px;
+            animation: pulse 2s ease-in-out infinite;
+            z-index: 4;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* ========== PAGE FLIP ========== */
         @keyframes pageFlip {
             0% {
                 transform: rotateY(0deg);
@@ -620,18 +839,46 @@
             }
         }
 
+        @keyframes bookOpen {
+            0% {
+                transform: rotateY(0deg) rotateX(0deg) scale(0.95);
+                opacity: 0;
+            }
+            50% {
+                transform: rotateY(-30deg) rotateX(5deg) scale(0.98);
+            }
+            100% {
+                transform: rotateY(-60deg) rotateX(0deg) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .book-opening {
+            animation: bookOpen 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+        }
+
         .page.flipping {
-            animation: pageFlip 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            animation: pageFlip 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
             transform-origin: right center;
         }
 
         .page.flipping-reverse {
-            animation: pageFlipReverse 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            animation: pageFlipReverse 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
             transform-origin: left center;
         }
 
         /* ========== RESPONSIVE ========== */
+        /* ========== COVER RESPONSIVE ========== */
         @media (max-width: 1024px) {
+            .cover-front {
+                max-width: 90%;
+                padding: 40px 30px;
+            }
+
+            .cover-title {
+                font-size: 3rem;
+            }
+
             .book-container {
                 flex-direction: column;
                 gap: 30px;
@@ -707,8 +954,27 @@
         </div>
     </div>
 
+    <!-- Book Cover -->
+    <div id="bookCover" class="book-cover">
+        <div class="cover-container">
+            <div class="cover-front">
+                <div class="cover-decoration cover-top"></div>
+                <div class="cover-content">
+                    <h1 class="cover-title" id="coverTitle" contenteditable="true">MY DIARY</h1>
+                    <p class="cover-subtitle" id="coverSubtitle" contenteditable="true">A Journey of Moments</p>
+                    <div class="cover-divider"></div>
+                    <p class="cover-author" id="coverAuthor" contenteditable="true">By You</p>
+                </div>
+                <div class="cover-decoration cover-bottom"></div>
+                <div class="cover-hint">Tap to Open</div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Container -->
-    <div class="container">
+    <div class="container" style="display: none;">
+
+    </div>
         <div class="book-container">
             <div class="book">
                 <!-- Left Page -->
@@ -781,9 +1047,59 @@
             const landing = document.getElementById('landing');
             landing.classList.add('hidden');
             setTimeout(() => {
+                showBookCover();
+            }, 800);
+        }
+
+        // ========== BOOK COVER ==========
+        function showBookCover() {
+            const bookCover = document.getElementById('bookCover');
+            bookCover.style.display = 'flex';
+            loadCoverCustomization();
+        }
+
+        function openDiaryFromCover() {
+            const bookCover = document.getElementById('bookCover');
+            const container = document.querySelector('.container');
+            const bookElement = document.querySelector('.book');
+
+            bookCover.classList.add('opening');
+            bookElement.classList.add('book-opening');
+
+            setTimeout(() => {
+                bookCover.style.display = 'none';
+                container.style.display = 'flex';
                 initializeDiary();
             }, 800);
         }
+
+        function loadCoverCustomization() {
+            const title = localStorage.getItem('coverTitle') || 'MY DIARY';
+            const subtitle = localStorage.getItem('coverSubtitle') || 'A Journey of Moments';
+            const author = localStorage.getItem('coverAuthor') || 'By You';
+
+            document.getElementById('coverTitle').textContent = title;
+            document.getElementById('coverSubtitle').textContent = subtitle;
+            document.getElementById('coverAuthor').textContent = author;
+        }
+
+        function saveCoverCustomization() {
+            const title = document.getElementById('coverTitle').textContent;
+            const subtitle = document.getElementById('coverSubtitle').textContent;
+            const author = document.getElementById('coverAuthor').textContent;
+
+            localStorage.setItem('coverTitle', title);
+            localStorage.setItem('coverSubtitle', subtitle);
+            localStorage.setItem('coverAuthor', author);
+            showNotification('Cover updated');
+        }
+
+        // Save cover on blur
+        document.addEventListener('blur', (e) => {
+            if (e.target.id === 'coverTitle' || e.target.id === 'coverSubtitle' || e.target.id === 'coverAuthor') {
+                saveCoverCustomization();
+            }
+        }, true);
 
         // Starfield animation
         function createStarfield() {
@@ -921,7 +1237,7 @@
                     page.classList.remove('flipping', 'flipping-reverse');
                     page.style.animation = 'none';
                 });
-            }, 800);
+            }, 900);
         }
 
         function updatePageCounter() {
@@ -986,12 +1302,12 @@
             renderPages();
         }
 
-        // Load diary on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            // Landing page animation
-            setTimeout(() => {
-                // User needs to click to start
-            }, 500);
+        // Add click handler to book cover
+        document.addEventListener('DOMContentLoaded', () => {
+            const bookCover = document.getElementById('bookCover');
+            if (bookCover) {
+                bookCover.addEventListener('click', openDiaryFromCover);
+            }
         });
 
         // Keyboard shortcuts
