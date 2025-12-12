@@ -1028,7 +1028,8 @@
     <!-- Toolbar -->
     <div class="toolbar">
         <button class="toolbar-btn" title="Add Page" onclick="addNewPage()">➕</button>
-        <button class="toolbar-btn" title="Export PDF" onclick="exportToPDF()">📥</button>
+        <button class="toolbar-btn" title="Save as PNG" onclick="saveToPNG()">🖼️</button>
+        <button class="toolbar-btn" title="Back to Cover" onclick="backToCover()">📖</button>
         <button class="toolbar-btn" title="Settings" onclick="openSettings()">⚙️</button>
     </div>
 
@@ -1137,7 +1138,9 @@
             setTimeout(() => {
                 bookCover.style.display = 'none';
                 container.style.display = 'flex';
-                initializeDiary();
+                // Force reflow
+                void container.offsetHeight;
+                loadDiary();
             }, 800);
         }
 
@@ -1273,49 +1276,45 @@
         function nextPage() {
             const maxPages = Math.ceil(pages.length / 2);
             if (currentPageIndex < maxPages - 1) {
-                animatePageTurn();
-                setTimeout(() => {
-                    currentPageIndex++;
-                    renderPages();
-                }, 450);
+                currentPageIndex++;
+                animatePageTurn(false);
+                renderPages();
             }
         }
 
         function previousPage() {
             if (currentPageIndex > 0) {
+                currentPageIndex--;
                 animatePageTurn(true);
-                setTimeout(() => {
-                    currentPageIndex--;
-                    renderPages();
-                }, 450);
+                renderPages();
             }
         }
 
         function animatePageTurn(reverse = false) {
-            const pages = document.querySelectorAll('.page');
-            pages.forEach((page, index) => {
-                // Reset animation
-                page.style.animation = 'none';
+            const pageElements = document.querySelectorAll('.page');
+            pageElements.forEach(page => {
+                // Remove existing animations
+                page.style.animation = '';
                 page.classList.remove('flipping', 'flipping-reverse');
                 
-                // Trigger reflow to restart animation
-                void page.offsetWidth;
+                // Force reflow
+                void page.offsetHeight;
                 
-                // Start animation with staggered timing for visual effect
-                setTimeout(() => {
-                    if (reverse) {
-                        page.classList.add('flipping-reverse');
-                    } else {
-                        page.classList.add('flipping');
-                    }
-                }, index * 30);
+                // Apply new animation
+                if (reverse) {
+                    page.classList.add('flipping-reverse');
+                } else {
+                    page.classList.add('flipping');
+                }
             });
 
+            // Clean up after animation completes
             setTimeout(() => {
-                pages.forEach(page => {
+                pageElements.forEach(page => {
                     page.classList.remove('flipping', 'flipping-reverse');
+                    page.style.transform = '';
                 });
-            }, 950);
+            }, 900);
         }
 
         function updatePageCounter() {
@@ -1343,12 +1342,46 @@
         }
 
         // ========== EXPORT & SETTINGS ==========
-        function exportToPDF() {
-            showNotification('Preparing PDF...');
-            // This would require pdf library integration
-            setTimeout(() => {
-                showNotification('Export feature available with pdf library');
-            }, 1500);
+        function saveToPNG() {
+            showNotification('Saving diary as PNG...');
+            const container = document.querySelector('.book-container');
+            
+            html2canvas(container, {
+                scale: 3,
+                quality: 1,
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#1a1a1a',
+                allowTaint: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = `diary-${new Date().toISOString().split('T')[0]}.png`;
+                link.click();
+                showNotification('Diary saved as PNG!');
+            }).catch(err => {
+                console.error('Error saving PNG:', err);
+                showNotification('Error saving PNG. Please try again.');
+            });
+        }
+
+        function backToCover() {
+            const bookCover = document.getElementById('bookCover');
+            const container = document.querySelector('.container');
+            
+            // Hide diary, show cover
+            container.style.display = 'none';
+            bookCover.style.display = 'flex';
+            bookCover.classList.remove('opening');
+            
+            // Reset animation state
+            const pageElements = document.querySelectorAll('.page');
+            pageElements.forEach(page => {
+                page.classList.remove('flipping', 'flipping-reverse');
+                page.style.transform = '';
+            });
+            
+            showNotification('Returned to cover');
         }
 
         function openSettings() {
