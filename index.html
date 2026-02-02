@@ -3,1473 +3,439 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Premium Luxury Diary with realistic textures and animations">
-    <title>Luxury Diary - Ultimate Edition</title>
-    
-    <!-- CDN LIBRARIES -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    
+    <title>For You, Betu 🤍</title>
+    <!-- Romantic Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
-
         :root {
-            --gold-dark: #d4a574;
-            --gold-light: #f4e4c1;
-            --burgundy-dark: #5c2e3a;
-            --burgundy-light: #8b4a5a;
-            --ivory: #f5f3f0;
-            --cream: #fefdfb;
-            --charcoal: #1a1a1a;
-            --black-luxe: #0f0f0f;
-            --shadow-subtle: rgba(0, 0, 0, 0.08);
-            --shadow-medium: rgba(0, 0, 0, 0.15);
-            --shadow-dark: rgba(0, 0, 0, 0.25);
-            
-            --font-serif: 'Playfair Display', serif;
-            --font-elegant: 'Cormorant Garamond', serif;
-            --font-sans: 'Inter', sans-serif;
+            --bg-color: #faf7f2;
+            --accent-pink: #f4dcd6;
+            --soft-gold: #c5a059;
+            --text-main: #4a3f3b;
+            --text-light: #9b8a84;
+            /* Ultra-realistic skin tone palette */
+            --skin-base: #f7dcd1;
+            --skin-mid: #eac7ba;
+            --skin-deep: #d9a896;
+            --skin-highlight: #fdf5f2;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
-            font-family: var(--font-sans);
-            color: var(--charcoal);
-            -webkit-font-smoothing: antialiased;
-            perspective: 1200px;
+        body {
+            background-color: var(--bg-color);
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            font-family: 'Quicksand', sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* ========== LANDING ========== */
-        #landing {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        h1, h2, .cursive {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* --- Scroll Progress Bar --- */
+        #progress-bar {
+            position: fixed; top: 0; left: 0; height: 3px;
+            background: var(--accent-pink); z-index: 1000; width: 0%;
+        }
+
+        section {
+            min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(ellipse at center, #2a2a3a 0%, #0f0f1a 100%);
-            z-index: 1000;
-            opacity: 1;
-            transition: opacity 0.8s ease-out;
             flex-direction: column;
-        }
-
-        #landing.hidden {
-            pointer-events: none;
-            opacity: 0;
-        }
-
-        #starfieldContainer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .landing-content {
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
             text-align: center;
-            color: white;
-            z-index: 10;
-            backdrop-filter: blur(10px);
-            padding: 4rem;
-            border-radius: 20px;
-            border: 1px solid rgba(212, 165, 116, 0.3);
-            background: rgba(0, 0, 0, 0.3);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-
-        .landing-icon {
-            font-size: 5rem;
-            margin-bottom: 1.5rem;
-            opacity: 0;
-            animation: floatIn 1s ease-out 0.2s forwards;
-        }
-
-        @keyframes floatIn {
-            from { opacity: 0; transform: translateY(30px) scale(0.8); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .landing-title {
-            font-family: var(--font-serif);
-            font-size: 3.5rem;
-            font-weight: 900;
-            margin-bottom: 0.5rem;
-            letter-spacing: 2px;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out 0.3s forwards;
-            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-dark) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .landing-subtitle {
-            font-family: var(--font-elegant);
-            font-size: 1.2rem;
-            margin-bottom: 3rem;
-            opacity: 0;
-            color: rgba(244, 228, 193, 0.8);
-            animation: fadeInUp 0.8s ease-out 0.5s forwards;
-            letter-spacing: 1px;
-            font-weight: 400;
-        }
-
-        .landing-btn {
-            font-family: var(--font-serif);
-            padding: 1.2rem 3.5rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border: 2px solid var(--gold-dark);
-            border-radius: 50px;
-            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-light) 100%);
-            color: var(--black-luxe);
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 15px 40px rgba(212, 165, 116, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out 0.7s forwards;
-            letter-spacing: 1.5px;
-        }
-
-        .landing-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 25px 50px rgba(212, 165, 116, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ========== MAIN CONTAINER ========== */
-        .container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #2d2d2d 100%);
-            padding: 20px;
-        }
-
-        /* ========== BOOK STRUCTURE ========== */
-        .book-container {
-            perspective: 1200px;
-            width: 100%;
-            max-width: 1200px;
-            height: 90vh;
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .book {
-            width: 100%;
-            height: 100%;
-            max-width: 900px;
-            max-height: 600px;
-            display: flex;
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.4),
-                0 0 0 1px rgba(212, 165, 116, 0.2),
-                inset -2px 0 10px rgba(0, 0, 0, 0.3),
-                inset 2px 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-            background: linear-gradient(90deg, #f5f3f0 0%, #fefdfb 50%, #f5f3f0 100%);
-            transform-style: preserve-3d;
             position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        .book::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                repeating-linear-gradient(
-                    90deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(0, 0, 0, 0.02) 2px,
-                    rgba(0, 0, 0, 0.02) 4px
-                ),
-                repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(0, 0, 0, 0.01) 2px,
-                    rgba(0, 0, 0, 0.01) 4px
-                );
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        /* ========== PAGE STRUCTURE ========== */
-        .page {
-            flex: 1;
-            background: var(--ivory);
-            padding: 40px 35px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 
-                inset 0 0 20px rgba(0, 0, 0, 0.05),
-                inset 1px 0 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .page::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(ellipse at 20% 50%, rgba(212, 165, 116, 0.05) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 50%, rgba(139, 74, 90, 0.03) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
-        .page::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 1px,
-                rgba(0, 0, 0, 0.005) 1px,
-                rgba(0, 0, 0, 0.005) 2px
-            );
-            pointer-events: none;
-        }
-
-        .page-number {
-            position: absolute;
-            bottom: 15px;
-            font-size: 0.8rem;
-            color: var(--gold-dark);
-            font-family: var(--font-elegant);
-            letter-spacing: 2px;
-            opacity: 0.6;
-        }
-
-        .page-number.left {
-            left: 30px;
-        }
-
-        .page-number.right {
-            right: 30px;
-        }
-
-        .spine {
-            width: 30px;
-            background: linear-gradient(90deg, #8b7355 0%, #a0826d 50%, #8b7355 100%);
-            box-shadow: 
-                inset -3px 0 8px rgba(0, 0, 0, 0.3),
-                inset 3px 0 8px rgba(255, 255, 255, 0.1),
-                0 0 20px rgba(0, 0, 0, 0.2);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .spine::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                90deg,
-                transparent,
-                transparent 1px,
-                rgba(0, 0, 0, 0.1) 1px,
-                rgba(0, 0, 0, 0.1) 2px
-            );
-            pointer-events: none;
-        }
-
-        .spine::after {
-            content: '✦';
-            color: var(--gold-dark);
-            font-size: 1.2rem;
-            opacity: 0.6;
-            z-index: 2;
-        }
-
-        /* ========== CONTROLS ========== */
-        .controls {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px 30px;
-            border-radius: 50px;
-            border: 1px solid rgba(212, 165, 116, 0.3);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: 1px solid var(--gold-dark);
-            background: linear-gradient(135deg, rgba(212, 165, 116, 0.2) 0%, rgba(212, 165, 116, 0.05) 100%);
-            color: var(--gold-light);
-            border-radius: 25px;
-            cursor: pointer;
-            font-family: var(--font-serif);
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            background: linear-gradient(135deg, rgba(212, 165, 116, 0.4) 0%, rgba(212, 165, 116, 0.15) 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(212, 165, 116, 0.3);
-        }
-
-        .btn:active {
+        section.visible {
+            opacity: 1;
             transform: translateY(0);
         }
 
-        .btn--danger {
-            border-color: #ff6b6b;
-            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2) 0%, rgba(255, 107, 107, 0.05) 100%);
-            color: #ff9999;
-        }
-
-        .btn--danger:hover {
-            background: linear-gradient(135deg, rgba(255, 107, 107, 0.4) 0%, rgba(255, 107, 107, 0.15) 100%);
-            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
-        }
-
-        .btn-separator {
-            width: 1px;
-            height: 30px;
-            background: linear-gradient(180deg, transparent, rgba(212, 165, 116, 0.3), transparent);
-        }
-
-        .page-counter {
-            color: var(--gold-light);
-            font-family: var(--font-serif);
-            font-weight: 600;
-            font-size: 0.95rem;
-            min-width: 100px;
-            text-align: center;
-            letter-spacing: 1px;
-        }
-
-        /* ========== TOOLBAR ========== */
-        .toolbar {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            display: flex;
-            gap: 12px;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 15px 20px;
-            border-radius: 40px;
-            border: 1px solid rgba(212, 165, 116, 0.2);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        }
-
-        .toolbar-btn {
-            width: 40px;
-            height: 40px;
-            border: 1px solid var(--gold-dark);
-            background: linear-gradient(135deg, rgba(212, 165, 116, 0.2) 0%, rgba(212, 165, 116, 0.05) 100%);
-            color: var(--gold-light);
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .toolbar-btn:hover {
-            background: linear-gradient(135deg, rgba(212, 165, 116, 0.4) 0%, rgba(212, 165, 116, 0.15) 100%);
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(212, 165, 116, 0.3);
-        }
-
-        /* ========== FORM ========== */
-        .form-section {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .form-section::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .form-section::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .form-section::-webkit-scrollbar-thumb {
-            background: var(--gold-dark);
-            border-radius: 10px;
-            opacity: 0.5;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-label {
-            font-family: var(--font-serif);
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--burgundy-dark);
-            letter-spacing: 0.5px;
-        }
-
-        .form-input {
-            padding: 12px 15px;
-            border: 2px solid var(--gold-dark);
-            border-radius: 8px;
-            font-family: var(--font-elegant);
-            font-size: 1rem;
-            background: linear-gradient(135deg, rgba(244, 228, 193, 0.1) 0%, transparent 100%);
-            color: var(--charcoal);
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--burgundy-light);
-            box-shadow: 0 0 15px rgba(212, 165, 116, 0.3), inset 0 0 10px rgba(212, 165, 116, 0.1);
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        textarea.form-input {
-            resize: vertical;
-            min-height: 150px;
-            max-height: 300px;
-            font-family: var(--font-elegant);
-        }
-
-        /* ========== MODAL ========== */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, var(--ivory) 0%, var(--cream) 100%);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            max-width: 500px;
-            border: 2px solid var(--gold-dark);
-            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-title {
-            font-family: var(--font-serif);
+        .quote {
             font-size: 2rem;
-            font-weight: 900;
-            margin-bottom: 20px;
-            color: var(--burgundy-dark);
-            text-align: center;
-        }
-
-        .modal-text {
-            font-family: var(--font-elegant);
-            font-size: 1.05rem;
-            color: var(--charcoal);
-            margin-bottom: 30px;
             line-height: 1.6;
-            text-align: center;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            font-weight: 300;
         }
 
-        .modal-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
+        /* --- Music Player UI --- */
+        .music-box {
+            position: fixed; bottom: 30px; right: 30px; z-index: 100;
+            background: white; padding: 10px 15px; border-radius: 30px;
+            display: flex; align-items: center; gap: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            cursor: pointer; transition: 0.3s;
+        }
+        .music-box:hover { transform: scale(1.05); }
+        .music-visualizer {
+            display: flex; gap: 3px; height: 15px; align-items: flex-end;
+        }
+        .bar { width: 3px; background: var(--accent-pink); border-radius: 3px; }
+        .playing .bar { animation: barGrow 1s infinite ease-in-out; }
+        @keyframes barGrow { 0%, 100% { height: 5px; } 50% { height: 15px; } }
+
+        /* --- Distance Map Section --- */
+        .map-visual {
+            position: relative; width: 300px; height: 100px; margin: 3rem 0;
+        }
+        .map-line {
+            position: absolute; top: 50%; left: 0; width: 100%; height: 2px;
+            background: repeating-linear-gradient(90deg, #d6c3ba, #d6c3ba 5px, transparent 5px, transparent 10px);
+        }
+        .heart-traveler {
+            position: absolute; top: 50%; left: 0%; transform: translate(-50%, -50%);
+            font-size: 1.5rem; transition: left 0.1s linear;
         }
 
-        .modal-btn {
-            padding: 12px 30px;
-            border: 2px solid var(--gold-dark);
-            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-light) 100%);
-            color: var(--black-luxe);
-            border-radius: 25px;
-            cursor: pointer;
-            font-family: var(--font-serif);
-            font-weight: 700;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            letter-spacing: 1px;
-        }
-
-        .modal-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(212, 165, 116, 0.4);
-        }
-
-        .modal-btn--cancel {
-            background: var(--ivory);
-            color: var(--charcoal);
-            border-color: var(--burgundy-dark);
-        }
-
-        .modal-btn--cancel:hover {
-            background: var(--cream);
-            box-shadow: 0 10px 25px rgba(92, 46, 58, 0.2);
-        }
-
-        /* ========== SETTINGS MODAL ========== */
-        .modal-settings {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .settings-btn {
-            padding: 15px 20px;
-            border: 2px solid var(--gold-dark);
-            background: linear-gradient(135deg, rgba(212, 165, 116, 0.15) 0%, rgba(212, 165, 116, 0.05) 100%);
-            color: var(--burgundy-dark);
-            border-radius: 10px;
-            cursor: pointer;
-            font-family: var(--font-serif);
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            letter-spacing: 0.5px;
-        }
-
-        .settings-btn:hover {
-            background: linear-gradient(135deg, rgba(212, 165, 116, 0.3) 0%, rgba(212, 165, 116, 0.1) 100%);
-            transform: translateX(5px);
-            box-shadow: 0 8px 20px rgba(212, 165, 116, 0.3);
-        }
-
-        .settings-btn:active {
-            transform: translateX(3px);
-        }
-
-        /* ========== ANIMATIONS ========== */
-        /* ========== BOOK COVER ========== */
-        .book-cover {
-            position: fixed;
-            top: 0;
-            left: 0;
+        /* --- THE CEREMONY: EXTREME REALISM --- */
+        .ceremony-container {
+            perspective: 1200px;
             width: 100%;
-            height: 100%;
             display: flex;
-            align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
-            z-index: 500;
-            animation: fadeInBg 0.5s ease;
-        }
-
-        .book-cover.opening {
-            animation: fadeOutBg 0.8s ease forwards;
-        }
-
-        @keyframes fadeInBg {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeOutBg {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-
-        .cover-container {
-            perspective: 1500px;
-            width: 100%;
-            height: 100%;
-            display: flex;
             align-items: center;
-            justify-content: center;
+            margin: 2rem 0;
         }
 
-        .cover-front {
-            width: 100%;
-            max-width: 500px;
-            height: 90vh;
-            background: linear-gradient(135deg, #8b7355 0%, #a0826d 50%, #8b7355 100%);
-            border-radius: 12px;
-            box-shadow: 
-                0 40px 80px rgba(0, 0, 0, 0.6),
-                0 0 0 1px rgba(212, 165, 116, 0.3),
-                inset -5px 0 20px rgba(0, 0, 0, 0.4),
-                inset 5px 0 20px rgba(255, 255, 255, 0.1);
-            padding: 60px 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            text-align: center;
+        .ceremony-stage {
             position: relative;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            transform: scale(1);
-            border: 2px solid rgba(212, 165, 116, 0.2);
+            width: 350px;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
         }
 
-        .cover-front:hover {
-            transform: scale(1.02);
-            box-shadow: 
-                0 50px 100px rgba(0, 0, 0, 0.7),
-                0 0 0 1px rgba(212, 165, 116, 0.5),
-                inset -5px 0 20px rgba(0, 0, 0, 0.4),
-                inset 5px 0 20px rgba(255, 255, 255, 0.15);
-        }
-
-        .cover-front::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                90deg,
-                transparent,
-                transparent 1px,
-                rgba(0, 0, 0, 0.1) 1px,
-                rgba(0, 0, 0, 0.1) 2px
+        /* The Finger: High Fidelity */
+        .finger-realistic {
+            position: relative;
+            width: 95px;
+            height: 380px;
+            z-index: 1;
+            background: linear-gradient(to right, 
+                var(--skin-deep) 0%, 
+                var(--skin-base) 25%, 
+                var(--skin-highlight) 50%, 
+                var(--skin-mid) 75%, 
+                var(--skin-deep) 100%
             );
-            border-radius: 12px;
+            border-radius: 50px 50px 20px 20px;
+            box-shadow: 
+                inset -8px 0 20px rgba(139, 93, 72, 0.2), 
+                inset 8px 0 15px rgba(255, 255, 255, 0.5),
+                20px 30px 50px rgba(0,0,0,0.1);
+            overflow: visible;
+        }
+
+        .finger-realistic::after { /* Subsurface scattering effect */
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 50% 10%, rgba(255,180,180,0.2) 0%, transparent 70%);
             pointer-events: none;
+        }
+
+        .nail {
+            position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+            width: 58px; height: 75px;
+            background: linear-gradient(to bottom, #fceae3, #f7dcd1);
+            border-radius: 28px 28px 10px 10px;
+            box-shadow: inset 0 -3px 5px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.05);
+            opacity: 0.8;
+        }
+
+        .knuckle-detail {
+            position: absolute; width: 70%; left: 15%; height: 2px;
+            background: rgba(0,0,0,0.05); border-radius: 50%;
+        }
+
+        /* The Paper Ring: Origami Physics */
+        #ring-wrapper {
+            position: absolute;
+            top: 40px;
+            width: 130px;
+            z-index: 10;
+            transition: all 4.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: rotateX(25deg) rotateY(0deg);
+            filter: drop-shadow(0 20px 20px rgba(0,0,0,0.15));
+        }
+
+        #ring-wrapper.worn {
+            top: 245px;
+            transform: rotateX(10deg) scale(0.8);
+            filter: drop-shadow(0 5px 8px rgba(0,0,0,0.25));
+        }
+
+        /* Dynamic shadow on the skin */
+        #ring-shadow {
+            position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
+            width: 90px; height: 20px; background: rgba(0,0,0,0.1);
+            border-radius: 50%; filter: blur(8px); opacity: 0;
+            transition: all 4.5s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1;
         }
-
-        .cover-front::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
-            border-radius: 12px;
-            pointer-events: none;
-            z-index: 2;
+        #ring-wrapper.worn + .finger-realistic #ring-shadow {
+            top: 245px; opacity: 0.4; width: 70px;
         }
 
-        .cover-content {
-            position: relative;
-            z-index: 3;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
+        /* --- Interactive Rose Petals --- */
+        .petal {
+            position: fixed; pointer-events: none; z-index: 999;
+            background: #f4dcd6; border-radius: 150% 0 150% 0;
+            animation: petalFall 6s linear forwards;
+        }
+        @keyframes petalFall {
+            0% { transform: translate(0, -10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translate(100px, 110vh) rotate(720deg); opacity: 0; }
         }
 
-        .cover-title {
-            font-family: var(--font-serif);
-            font-size: 4rem;
-            font-weight: 900;
-            color: var(--gold-light);
-            margin: 0;
-            letter-spacing: 3px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            outline: none;
-            border: 2px solid transparent;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+        /* --- Buttons & UI --- */
+        .action-btn {
+            background: white; border: none; padding: 1.2rem 3rem;
+            border-radius: 50px; font-family: 'Quicksand', sans-serif;
+            font-size: 1.1rem; color: var(--text-main); cursor: pointer;
+            box-shadow: 0 10px 30px rgba(244, 220, 214, 0.6);
+            transition: 0.4s; position: relative; overflow: hidden;
+        }
+        .action-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(244, 220, 214, 0.8); }
+
+        .flash-effect {
+            position: fixed; inset: 0; background: white; opacity: 0;
+            pointer-events: none; z-index: 2000;
         }
 
-        .cover-title:focus {
-            background: rgba(212, 165, 116, 0.2);
-            border-color: var(--gold-dark);
-        }
-
-        .cover-subtitle {
-            font-family: var(--font-elegant);
-            font-size: 1.3rem;
-            color: rgba(244, 228, 193, 0.9);
-            margin: 0;
-            letter-spacing: 2px;
-            font-weight: 400;
-            outline: none;
-            border: 2px solid transparent;
-            padding: 8px 15px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .cover-subtitle:focus {
-            background: rgba(212, 165, 116, 0.2);
-            border-color: var(--gold-dark);
-        }
-
-        .cover-divider {
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
-            margin: 10px 0;
-        }
-
-        .cover-author {
-            font-family: var(--font-elegant);
-            font-size: 1.05rem;
-            color: rgba(244, 228, 193, 0.7);
-            margin: 0;
-            letter-spacing: 1.5px;
-            outline: none;
-            border: 2px solid transparent;
-            padding: 6px 12px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .cover-author:focus {
-            background: rgba(212, 165, 116, 0.2);
-            border-color: var(--gold-dark);
-        }
-
-        .cover-decoration {
-            position: relative;
-            z-index: 3;
-            width: 150px;
-            height: 50px;
-            background: repeating-linear-gradient(
-                90deg,
-                var(--gold-dark),
-                var(--gold-dark) 3px,
-                transparent 3px,
-                transparent 15px
-            );
-            border-top: 2px solid var(--gold-light);
-            border-bottom: 2px solid var(--gold-light);
-        }
-
-        .cover-decoration.cover-top {
-            margin-bottom: 20px;
-        }
-
-        .cover-decoration.cover-bottom {
-            margin-top: 20px;
-        }
-
-        .cover-hint {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: var(--font-elegant);
-            color: rgba(244, 228, 193, 0.5);
-            font-size: 0.95rem;
-            letter-spacing: 1.5px;
-            animation: pulse 2s ease-in-out infinite;
-            z-index: 4;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        /* ========== PAGE FLIP ========== */
-        @keyframes pageFlip {
-            0% {
-                transform: rotateY(0deg);
-            }
-            100% {
-                transform: rotateY(-180deg);
-            }
-        }
-
-        @keyframes pageFlipReverse {
-            0% {
-                transform: rotateY(0deg);
-            }
-            100% {
-                transform: rotateY(180deg);
-            }
-        }
-
-        @keyframes bookOpen {
-            0% {
-                transform: rotateY(0deg) rotateX(0deg) scale(0.95);
-                opacity: 0;
-            }
-            50% {
-                transform: rotateY(-30deg) rotateX(5deg) scale(0.98);
-            }
-            100% {
-                transform: rotateY(-60deg) rotateX(0deg) scale(1);
-                opacity: 1;
-            }
-        }
-
-        .book-opening {
-            animation: bookOpen 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
-        }
-
-        .page.flipping {
-            animation: pageFlip 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-            transform-origin: right center;
-        }
-
-        .page.flipping-reverse {
-            animation: pageFlipReverse 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-            transform-origin: left center;
-        }
-
-        /* ========== RESPONSIVE ========== */
-        /* ========== COVER RESPONSIVE ========== */
-        @media (max-width: 1024px) {
-            .cover-front {
-                max-width: 90%;
-                padding: 40px 30px;
-            }
-
-            .cover-title {
-                font-size: 3rem;
-            }
-
-            .book-container {
-                flex-direction: column;
-                gap: 30px;
-            }
-
-            .book {
-                max-width: 100%;
-                max-height: 500px;
-            }
-
-            .controls {
-                flex-wrap: wrap;
-                width: auto;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .landing-title {
-                font-size: 2.5rem;
-            }
-
-            .landing-subtitle {
-                font-size: 1rem;
-            }
-
-            .toolbar {
-                top: 15px;
-                right: 15px;
-            }
-
-            .controls {
-                bottom: 15px;
-                padding: 15px 20px;
-            }
-
-            .btn {
-                padding: 8px 16px;
-                font-size: 0.8rem;
-            }
-        }
-
-        /* ========== NOTIFICATION ========== */
-        .notification {
-            position: fixed;
-            bottom: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-light) 100%);
-            color: var(--black-luxe);
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-family: var(--font-serif);
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(212, 165, 116, 0.4);
-            animation: slideUp 0.4s ease;
-            z-index: 99;
-        }
-
-        .notification.hidden {
-            display: none;
+        /* --- Responsiveness --- */
+        @media (max-width: 480px) {
+            .quote { font-size: 1.4rem; }
+            .ceremony-stage { transform: scale(0.8); margin-top: -50px; }
         }
     </style>
 </head>
 <body>
-    <!-- Landing Page -->
-    <div id="landing">
-        <div id="starfieldContainer"></div>
-        <div class="landing-content">
-            <div class="landing-icon">📖</div>
-            <h1 class="landing-title">LUXURY DIARY</h1>
-            <p class="landing-subtitle">Premium Digital Journal</p>
-            <button class="landing-btn" onclick="startDiary()">Begin Your Story</button>
+
+    <div id="progress-bar"></div>
+    <div class="flash-effect" id="flash"></div>
+
+    <div class="music-box" id="music-btn" onclick="toggleMusic()">
+        <div class="music-visualizer" id="visualizer">
+            <div class="bar" style="animation-delay: 0.1s"></div>
+            <div class="bar" style="animation-delay: 0.3s"></div>
+            <div class="bar" style="animation-delay: 0.2s"></div>
+            <div class="bar" style="animation-delay: 0.4s"></div>
         </div>
+        <span style="font-size: 0.9rem; font-weight: 500;">Music for Betu</span>
     </div>
 
-    <!-- Book Cover -->
-    <div id="bookCover" class="book-cover">
-        <div class="cover-container">
-            <div class="cover-front">
-                <div class="cover-decoration cover-top"></div>
-                <div class="cover-content">
-                    <h1 class="cover-title" id="coverTitle" contenteditable="true">MY DIARY</h1>
-                    <p class="cover-subtitle" id="coverSubtitle" contenteditable="true">A Journey of Moments</p>
-                    <div class="cover-divider"></div>
-                    <p class="cover-author" id="coverAuthor" contenteditable="true">By You</p>
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Section 1: Landing -->
+    <section id="landing">
+        <h1 class="cursive" style="font-size: 4rem; color: var(--soft-gold); margin-bottom: 1rem;">Hey Betu...</h1>
+        <p class="quote">“They say paper rings don’t last…<br>but some promises don’t need gold.”</p>
+        <div class="cursive" style="font-size: 1.5rem; opacity: 0.6;">Scroll down slowly... 🤍</div>
+    </section>
+
+    <!-- Section 2: Showcase -->
+    <section>
+        <div style="transform: rotate(-5deg); transition: 0.5s;" onmouseover="this.style.transform='rotate(0deg) scale(1.1)'" onmouseout="this.style.transform='rotate(-5deg) scale(1)'">
+            <svg width="200" height="200" viewBox="0 0 200 200">
+                <defs>
+                    <filter id="paper-shadow"><feDropShadow dx="0" dy="5" stdDeviation="3" flood-opacity="0.1"/></filter>
+                </defs>
+                <circle cx="100" cy="140" r="45" fill="none" stroke="#eee3dd" stroke-width="12" />
+                <path d="M100 40 L150 80 L100 120 L50 80 Z" fill="white" filter="url(#paper-shadow)" />
+                <path d="M100 55 L130 80 L100 105 L70 80 Z" fill="#fcf9f5" />
+                <circle cx="100" cy="80" r="6" fill="#f4dcd6" />
+            </svg>
+        </div>
+        <h2 class="quote">This ring isn't expensive.<br>But it is intentional.</h2>
+    </section>
+
+    <!-- Section 3: Distance Map -->
+    <section>
+        <h2 class="cursive" style="font-size: 2.5rem;">Distance is just a number.</h2>
+        <div class="map-visual">
+            <div class="map-line"></div>
+            <div class="heart-traveler" id="traveling-heart">✈️</div>
+            <div style="position:absolute; left:0; bottom:-25px; font-size: 0.8rem;">Me</div>
+            <div style="position:absolute; right:0; bottom:-25px; font-size: 0.8rem;">Ria (Betu)</div>
+        </div>
+        <p class="quote" style="font-size: 1.2rem;">Miles exist on maps,<br>not between hearts that choose each other.</p>
+    </section>
+
+    <!-- Section 4: The Interaction -->
+    <section id="interactive-section">
+        <div class="ceremony-container">
+            <div class="ceremony-stage">
+                <!-- The Paper Ring -->
+                <div id="ring-wrapper">
+                    <svg viewBox="0 0 200 200">
+                        <defs>
+                            <linearGradient id="paperGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ffffff" />
+                                <stop offset="100%" style="stop-color:#f0e6e1" />
+                            </linearGradient>
+                        </defs>
+                        <!-- High detail origami band -->
+                        <circle cx="100" cy="150" r="50" fill="none" stroke="url(#paperGrad)" stroke-width="14" />
+                        <!-- Rose Top with Folds -->
+                        <path d="M100 30 L150 75 L100 120 L50 75 Z" fill="white" stroke="#d6c3ba" stroke-width="0.5" />
+                        <path d="M100 45 L130 75 L100 105 L70 75 Z" fill="#fdfaf8" stroke="#d6c3ba" stroke-width="0.5" />
+                        <circle cx="100" cy="75" r="7" fill="#f4dcd6" />
+                    </svg>
                 </div>
-                <div class="cover-decoration cover-bottom"></div>
-                <div class="cover-hint">Tap to Open</div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Main Container -->
-    <div class="container">
-        <div class="book-container">
-            <div class="book">
-                <!-- Left Page -->
-                <div class="page">
-                    <span class="page-number left" id="leftPageNum"></span>
-                    <div class="form-section" id="leftFormSection"></div>
-                </div>
-
-                <!-- Spine -->
-                <div class="spine"></div>
-
-                <!-- Right Page -->
-                <div class="page">
-                    <span class="page-number right" id="rightPageNum"></span>
-                    <div class="form-section" id="rightFormSection"></div>
+                <!-- The Realistic Finger -->
+                <div class="finger-realistic">
+                    <div id="ring-shadow"></div>
+                    <div class="nail"></div>
+                    <div class="knuckle-detail" style="top: 35%;"></div>
+                    <div class="knuckle-detail" style="top: 37%;"></div>
+                    <div class="knuckle-detail" style="top: 68%;"></div>
+                    <div class="knuckle-detail" style="top: 70%;"></div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Toolbar -->
-    <div class="toolbar">
-        <button class="toolbar-btn" title="Add Page" onclick="addNewPage()">➕</button>
-        <button class="toolbar-btn" title="Save as PNG" onclick="saveToPNG()">🖼️</button>
-        <button class="toolbar-btn" title="Back to Cover" onclick="backToCover()">📖</button>
-        <button class="toolbar-btn" title="Settings" onclick="openSettings()">⚙️</button>
-    </div>
+        <button class="action-btn" id="ring-btn" onclick="startCeremony()">
+            Betu, haath aage badhao 🤍
+        </button>
 
-    <!-- Delete All Modal -->
-    <div id="deleteAllModal" class="modal">
-        <div class="modal-content">
-            <h2 class="modal-title">⚠️ Delete All Pages?</h2>
-            <p class="modal-text">This action will permanently delete all your diary entries. This cannot be undone.</p>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn--cancel" onclick="closeModal('deleteAllModal')">Cancel</button>
-                <button class="modal-btn" onclick="confirmDeleteAll()">Delete All</button>
-            </div>
+        <div id="final-msg" class="cursive" style="margin-top: 2rem; opacity: 0; font-size: 2rem; color: var(--soft-gold); transition: 2s;">
+            Pehna di... Forever yours.
         </div>
-    </div>
+    </section>
 
-    <!-- Settings Modal -->
-    <div id="settingsModal" class="modal">
-        <div class="modal-content">
-            <h2 class="modal-title">⚙️ Settings</h2>
-            <div class="modal-settings">
-                <button class="settings-btn" onclick="openCoverCustomizer()">📖 Customize Cover</button>
-                <button class="settings-btn" onclick="showNotification('Theme coming soon')">🎨 Theme Settings</button>
-                <button class="settings-btn" onclick="showNotification('About coming soon')">ℹ️ About</button>
-            </div>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn--cancel" onclick="closeSettings()">Close</button>
-            </div>
+    <!-- Section 5: Signature -->
+    <section>
+        <p class="quote" style="font-size: 2.2rem;">Until the real ring…<br>this one is yours.</p>
+        <div style="margin-top: 4rem;">
+            <p class="sub-text" style="color: var(--text-light); letter-spacing: 2px;">ALWAYS.</p>
+            <h1 class="cursive" style="font-size: 4rem; margin-top: 0.5rem;">Priyanshu 🤍</h1>
         </div>
-    </div>
-
-    <!-- Cover Customizer Modal -->
-    <div id="coverCustomizerModal" class="modal">
-        <div class="modal-content">
-            <h2 class="modal-title">📖 Customize Cover</h2>
-            <div class="form-group" style="margin-bottom: 20px;">
-                <label class="form-label">Title</label>
-                <input type="text" id="customTitleInput" class="form-input" placeholder="Enter title...">
-            </div>
-            <div class="form-group" style="margin-bottom: 20px;">
-                <label class="form-label">Subtitle</label>
-                <input type="text" id="customSubtitleInput" class="form-input" placeholder="Enter subtitle...">
-            </div>
-            <div class="form-group" style="margin-bottom: 20px;">
-                <label class="form-label">Author</label>
-                <input type="text" id="customAuthorInput" class="form-input" placeholder="Enter author...">
-            </div>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn--cancel" onclick="closeCoverCustomizer()">Cancel</button>
-                <button class="modal-btn" onclick="saveCoverCustomization()">💾 Save Changes</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Controls -->
-    <div class="controls">
-        <button class="btn" onclick="previousPage()">← Previous</button>
-        <div class="btn-separator"></div>
-        <div class="page-counter">
-            <span id="currentPage">1</span> / <span id="totalPages">1</span>
-        </div>
-        <div class="btn-separator"></div>
-        <button class="btn" onclick="nextPage()">Next →</button>
-        <div class="btn-separator"></div>
-        <button class="btn btn--danger" onclick="openDeleteModal()">🗑️ Delete All</button>
-    </div>
-
-    <!-- Notification -->
-    <div id="notification" class="notification hidden"></div>
+    </section>
 
     <script>
-        // ========== STATE MANAGEMENT ==========
-        let pages = [];
-        let currentPageIndex = 0;
+        // Scroll Progress & Map Interaction
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
 
-        // Initialize with one empty page
-        function initializeDiary() {
-            pages = [{ title: '', content: '' }];
-            currentPageIndex = 0;
-            renderPages();
-        }
+            // Map heart movement
+            const heart = document.getElementById('traveling-heart');
+            heart.style.left = scrolled + "%";
+            heart.innerHTML = scrolled > 95 ? "🏠" : "✈️";
+        });
 
-        // ========== LANDING PAGE ==========
-        function startDiary() {
-            const landing = document.getElementById('landing');
-            landing.classList.add('hidden');
+        // Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(s => observer.observe(s));
+
+        // Ceremony Logic
+        function startCeremony() {
+            const wrapper = document.getElementById('ring-wrapper');
+            const btn = document.getElementById('ring-btn');
+            const msg = document.getElementById('final-msg');
+            const flash = document.getElementById('flash');
+
+            btn.style.opacity = '0';
+            btn.style.pointerEvents = 'none';
+
+            // Phase 1: Sliding down
+            wrapper.classList.add('worn');
+
+            // Phase 2: The "Moment"
             setTimeout(() => {
-                showBookCover();
-            }, 800);
-        }
-
-        // ========== BOOK COVER ==========
-        function showBookCover() {
-            const bookCover = document.getElementById('bookCover');
-            bookCover.style.display = 'flex';
-            loadCoverCustomization();
-        }
-
-        function openDiaryFromCover() {
-            const bookCover = document.getElementById('bookCover');
-            const container = document.querySelector('.container');
-            const bookElement = document.querySelector('.book');
-
-            bookCover.classList.add('opening');
-            bookElement.classList.add('book-opening');
-
-            setTimeout(() => {
-                bookCover.style.display = 'none';
-                container.style.display = 'flex';
-                // Force reflow
-                void container.offsetHeight;
-                loadDiary();
-            }, 800);
-        }
-
-        function loadCoverCustomization() {
-            const title = localStorage.getItem('coverTitle') || 'MY DIARY';
-            const subtitle = localStorage.getItem('coverSubtitle') || 'A Journey of Moments';
-            const author = localStorage.getItem('coverAuthor') || 'By You';
-
-            document.getElementById('coverTitle').textContent = title;
-            document.getElementById('coverSubtitle').textContent = subtitle;
-            document.getElementById('coverAuthor').textContent = author;
-        }
-
-        function saveCoverCustomization() {
-            const title = document.getElementById('coverTitle').textContent;
-            const subtitle = document.getElementById('coverSubtitle').textContent;
-            const author = document.getElementById('coverAuthor').textContent;
-
-            localStorage.setItem('coverTitle', title);
-            localStorage.setItem('coverSubtitle', subtitle);
-            localStorage.setItem('coverAuthor', author);
-            showNotification('Cover updated');
-        }
-
-        // Save cover on blur
-        document.addEventListener('blur', (e) => {
-            if (e.target.id === 'coverTitle' || e.target.id === 'coverSubtitle' || e.target.id === 'coverAuthor') {
-                saveCoverCustomization();
-            }
-        }, true);
-
-        // Starfield animation
-        function createStarfield() {
-            const container = document.getElementById('starfieldContainer');
-            if (!container) return;
-            
-            for (let i = 0; i < 100; i++) {
-                const star = document.createElement('div');
-                star.style.position = 'absolute';
-                star.style.width = Math.random() * 2 + 'px';
-                star.style.height = star.style.width;
-                star.style.background = 'white';
-                star.style.borderRadius = '50%';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.opacity = Math.random() * 0.8 + 0.2;
-                star.style.boxShadow = `0 0 ${Math.random() * 3}px white`;
-                star.style.animation = `twinkle ${Math.random() * 3 + 2}s infinite`;
-                container.appendChild(star);
-            }
-
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes twinkle {
-                    0%, 100% { opacity: 0.3; }
-                    50% { opacity: 1; }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-
-        createStarfield();
-
-        // ========== PAGE MANAGEMENT ==========
-        function renderPages() {
-            const leftForm = document.getElementById('leftFormSection');
-            const rightForm = document.getElementById('rightFormSection');
-            const leftPageNum = document.getElementById('leftPageNum');
-            const rightPageNum = document.getElementById('rightPageNum');
-
-            leftForm.innerHTML = '';
-            rightForm.innerHTML = '';
-
-            // Left page (even index)
-            const leftPageIdx = currentPageIndex * 2;
-            const rightPageIdx = currentPageIndex * 2 + 1;
-
-            if (leftPageIdx < pages.length) {
-                const leftPage = pages[leftPageIdx];
-                leftForm.innerHTML = createPageForm(leftPageIdx, leftPage);
-                leftPageNum.textContent = leftPageIdx + 1;
-            } else {
-                leftForm.innerHTML = '<p style="color: var(--gold-dark); opacity: 0.5;">This page is empty</p>';
-                leftPageNum.textContent = leftPageIdx + 1;
-            }
-
-            // Right page
-            if (rightPageIdx < pages.length) {
-                const rightPage = pages[rightPageIdx];
-                rightForm.innerHTML = createPageForm(rightPageIdx, rightPage);
-                rightPageNum.textContent = rightPageIdx + 1;
-            } else {
-                rightForm.innerHTML = '<p style="color: var(--gold-dark); opacity: 0.5;">This page is empty</p>';
-                rightPageNum.textContent = rightPageIdx + 1;
-            }
-
-            updatePageCounter();
-        }
-
-        function createPageForm(index, pageData) {
-            return `
-                <div class="form-group">
-                    <label class="form-label">Title</label>
-                    <input type="text" class="form-input" value="${pageData.title}" 
-                        onchange="updatePage(${index}, 'title', this.value)" placeholder="Enter title...">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Entry</label>
-                    <textarea class="form-input" 
-                        onchange="updatePage(${index}, 'content', this.value)" 
-                        placeholder="Write your story here..."></textarea>
-                </div>
-            `;
-        }
-
-        function updatePage(index, field, value) {
-            if (field === 'title') {
-                pages[index].title = value;
-                localStorage.setItem('diaryPages', JSON.stringify(pages));
-            } else if (field === 'content') {
-                pages[index].content = value;
-                localStorage.setItem('diaryPages', JSON.stringify(pages));
-            }
-        }
-
-        function addNewPage() {
-            pages.push({ title: '', content: '' });
-            localStorage.setItem('diaryPages', JSON.stringify(pages));
-            renderPages();
-            showNotification('New page added');
-        }
-
-        function nextPage() {
-            const maxPages = Math.ceil(pages.length / 2);
-            if (currentPageIndex < maxPages - 1) {
-                currentPageIndex++;
-                animatePageTurn(false);
-                renderPages();
-            }
-        }
-
-        function previousPage() {
-            if (currentPageIndex > 0) {
-                currentPageIndex--;
-                animatePageTurn(true);
-                renderPages();
-            }
-        }
-
-        function animatePageTurn(reverse = false) {
-            const pageElements = document.querySelectorAll('.page');
-            pageElements.forEach(page => {
-                // Remove existing animations
-                page.style.animation = '';
-                page.classList.remove('flipping', 'flipping-reverse');
+                // Flash effect (Camera click feel)
+                flash.style.opacity = '1';
+                setTimeout(() => flash.style.opacity = '0', 200);
                 
-                // Force reflow
-                void page.offsetHeight;
+                msg.style.opacity = '1';
+                spawnPetals();
                 
-                // Apply new animation
-                if (reverse) {
-                    page.classList.add('flipping-reverse');
-                } else {
-                    page.classList.add('flipping');
-                }
-            });
+                // Pulsing glow
+                wrapper.animate([
+                    { filter: 'drop-shadow(0 0 5px rgba(197,160,89,0))' },
+                    { filter: 'drop-shadow(0 0 30px rgba(197,160,89,0.5))' },
+                    { filter: 'drop-shadow(0 0 5px rgba(197,160,89,0))' }
+                ], { duration: 3000, iterations: Infinity });
 
-            // Clean up after animation completes
-            setTimeout(() => {
-                pageElements.forEach(page => {
-                    page.classList.remove('flipping', 'flipping-reverse');
-                    page.style.transform = '';
-                });
-            }, 900);
+            }, 4500);
         }
 
-        function updatePageCounter() {
-            const totalPagePairs = Math.ceil(pages.length / 2);
-            document.getElementById('currentPage').textContent = currentPageIndex + 1;
-            document.getElementById('totalPages').textContent = totalPagePairs;
+        function spawnPetals() {
+            for(let i=0; i<40; i++) {
+                setTimeout(() => {
+                    const p = document.createElement('div');
+                    p.className = 'petal';
+                    p.style.left = Math.random() * 100 + 'vw';
+                    p.style.width = (Math.random() * 15 + 10) + 'px';
+                    p.style.height = (Math.random() * 10 + 10) + 'px';
+                    p.style.opacity = Math.random();
+                    document.body.appendChild(p);
+                    setTimeout(() => p.remove(), 6000);
+                }, i * 150);
+            }
         }
 
-        // ========== MODAL FUNCTIONS ==========
-        function openDeleteModal() {
-            document.getElementById('deleteAllModal').classList.add('active');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        function confirmDeleteAll() {
-            pages = [{ title: '', content: '' }];
-            currentPageIndex = 0;
-            localStorage.removeItem('diaryPages');
-            renderPages();
-            closeModal('deleteAllModal');
-            showNotification('All pages deleted');
-        }
-
-        // ========== EXPORT & SETTINGS ==========
-        function saveToPNG() {
-            showNotification('Saving diary as PNG...');
-            const container = document.querySelector('.book-container');
-            
-            html2canvas(container, {
-                scale: 3,
-                quality: 1,
-                useCORS: true,
-                logging: false,
-                backgroundColor: '#1a1a1a',
-                allowTaint: true
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.href = canvas.toDataURL('image/png');
-                link.download = `diary-${new Date().toISOString().split('T')[0]}.png`;
-                link.click();
-                showNotification('Diary saved as PNG!');
-            }).catch(err => {
-                console.error('Error saving PNG:', err);
-                showNotification('Error saving PNG. Please try again.');
-            });
-        }
-
-        function backToCover() {
-            const bookCover = document.getElementById('bookCover');
-            const container = document.querySelector('.container');
-            
-            // Hide diary, show cover
-            container.style.display = 'none';
-            bookCover.style.display = 'flex';
-            bookCover.classList.remove('opening');
-            
-            // Reset animation state
-            const pageElements = document.querySelectorAll('.page');
-            pageElements.forEach(page => {
-                page.classList.remove('flipping', 'flipping-reverse');
-                page.style.transform = '';
-            });
-            
-            showNotification('Returned to cover');
-        }
-
-        function openSettings() {
-            document.getElementById('settingsModal').classList.add('active');
-        }
-
-        function closeSettings() {
-            document.getElementById('settingsModal').classList.remove('active');
-        }
-
-        function openCoverCustomizer() {
-            const modal = document.getElementById('coverCustomizerModal');
-            document.getElementById('customTitleInput').value = localStorage.getItem('coverTitle') || 'MY DIARY';
-            document.getElementById('customSubtitleInput').value = localStorage.getItem('coverSubtitle') || 'A Journey of Moments';
-            document.getElementById('customAuthorInput').value = localStorage.getItem('coverAuthor') || 'By You';
-            modal.classList.add('active');
-        }
-
-        function closeCoverCustomizer() {
-            document.getElementById('coverCustomizerModal').classList.remove('active');
-        }
-
-        function saveCoverCustomization() {
-            const title = document.getElementById('customTitleInput').value || 'MY DIARY';
-            const subtitle = document.getElementById('customSubtitleInput').value || 'A Journey of Moments';
-            const author = document.getElementById('customAuthorInput').value || 'By You';
-
-            localStorage.setItem('coverTitle', title);
-            localStorage.setItem('coverSubtitle', subtitle);
-            localStorage.setItem('coverAuthor', author);
-
-            document.getElementById('coverTitle').textContent = title;
-            document.getElementById('coverSubtitle').textContent = subtitle;
-            document.getElementById('coverAuthor').textContent = author;
-
-            closeCoverCustomizer();
-            closeSettings();
-            showNotification('Cover saved successfully!');
-        }
-
-        // ========== NOTIFICATIONS ==========
-        function showNotification(message) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.classList.remove('hidden');
-            setTimeout(() => {
-                notification.classList.add('hidden');
-            }, 2000);
-        }
-
-        // ========== STORAGE & PERSISTENCE ==========
-        function loadDiary() {
-            const saved = localStorage.getItem('diaryPages');
-            if (saved) {
-                try {
-                    pages = JSON.parse(saved);
-                } catch (e) {
-                    pages = [{ title: '', content: '' }];
-                }
+        function toggleMusic() {
+            const m = document.getElementById('bg-music');
+            const box = document.getElementById('music-btn');
+            const viz = document.getElementById('visualizer');
+            if (m.paused) {
+                m.play();
+                viz.classList.add('playing');
+                box.style.background = '#fefefe';
             } else {
-                pages = [{ title: '', content: '' }];
+                m.pause();
+                viz.classList.remove('playing');
+                box.style.background = '#f2f2f2';
             }
-            renderPages();
         }
 
-        // Add click handler to book cover
-        document.addEventListener('DOMContentLoaded', () => {
-            const bookCover = document.getElementById('bookCover');
-            if (bookCover) {
-                bookCover.addEventListener('click', openDiaryFromCover);
+        // Custom Cursor Interaction
+        document.addEventListener('mousemove', (e) => {
+            if(Math.random() > 0.92) { // Trail effect
+                const t = document.createElement('div');
+                t.innerHTML = '✨';
+                t.style.position = 'fixed';
+                t.style.left = e.clientX + 'px';
+                t.style.top = e.clientY + 'px';
+                t.style.pointerEvents = 'none';
+                t.style.fontSize = '12px';
+                t.style.zIndex = '9999';
+                document.body.appendChild(t);
+                t.animate([
+                    { transform: 'translateY(0) scale(1)', opacity: 1 },
+                    { transform: 'translateY(20px) scale(0)', opacity: 0 }
+                ], { duration: 1000, easing: 'ease-out' });
+                setTimeout(() => t.remove(), 1000);
             }
         });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' && e.ctrlKey) nextPage();
-            if (e.key === 'ArrowLeft' && e.ctrlKey) previousPage();
-        });
-
-        // Initial load
-        window.addEventListener('load', () => {
-            loadDiary();
-        });
-
-        // Auto-save
-        setInterval(() => {
-            localStorage.setItem('diaryPages', JSON.stringify(pages));
-        }, 5000);
     </script>
 </body>
 </html>
